@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block content %}
+<div class='container'>
+<div class="row" style='margin-top:80px'>
+		<div class="col-md-2"><div class="jumbotron" style="padding-left:10px">
+	<a target="_top" href="/addevents">Add events</a>
+	<a target="_top" href="/post">Add post</a>
+</div></div>
+<div class="col-md-5">
+{% for event in events %}
+<div class='jumbotron'>
+<p>{{event.title}}</p>
+<p><font size='2'>Starts on '{{event.start_date}}' and ends on '{{event.end_date}} created on '{{event.create_date}}'</font></p></div>
+{% endfor %}</div></div>
+
+<script>
+$(document).ready(function(){
+	$(".box").hide();
+	console.log('gggggggggggggggggggg');
+	$(".like-btn").click(function(){
+		console.log('likeeeeeeeeeeeeeeeeeeee');
+		var url = $(this).attr("data-url");
+		var type = $(this).attr("data-type");
+		var elem = $(this).closest('div.all-posts').find('.like');
+		console.log(type)
+		$.ajax({
+
+ 
+		    // The URL for the request
+		    url: url,
+		 
+		    // The data to send (will be converted to a query string)
+		    // data: {'id': 1, 'type':data-type},
+		 
+		    // Whether this is a POST or GET request
+		    type: "GET",
+		 
+		    // The type of data we expect back
+		 
+		    // Code to run if the request succeeds;
+		    // the response is passed to the function
+		    success: function( data ) {
+		        $(elem).html(data);
+		        location.reload();	
+		        
+		       
+
+		        //$('.like').html(data);
+		    },
+
+		 //    error: function(jqXHR, textStatus, errorThrown) {
+  	// 			console.log('sdfgva');
+			// },
+		 
+		    // Code to run if the request fails; the raw request and
+		    // status codes are passed to the functio
+		 
+		    // Code to run regardless of success or failure
+		  
+		});
+	});
+	
+	$(".comment-btn").click(function(){
+			console.log('hideeeeeeeeeeeeeeeeeee')
+        	$(".box").show();
+    	
+		console.log('commentttttttttttttttttt');
+		var url = $(this).attr("data-url");
+		var type = $(this).attr("data-type");
+		var text = $(this).closest('div.all-posts').find(".value").val()
+		var elem = $(this).closest('div.all-posts').find('.comment');
+		$.ajax({
+
+ 
+		    // The URL for the request
+		    url: url,
+		 
+		    // The data to send (will be converted to a query string)
+		    data: {'text':text},
+		 
+		    // Whether this is a POST or GET request
+		    type: "GET",
+		 
+		    // The type of data we expect back
+		 
+		    // Code to run if the request succeeds;
+		    // the response is passed to the function
+		    success: function( data ) {
+		        console.log('fsddddddddddd');
+		        console.log(data);
+		        $(elem).html(data);
+		        location.reload();
+
+		        //$('.like').html(data);
+		    },
+
+		 //    error: function(jqXHR, textStatus, errorThrown) {
+  	// 			console.log('sdfgva');
+			// },
+		 
+		    // Code to run if the request fails; the raw request and
+		    // status codes are passed to the functio
+		 
+		    // Code to run regardless of success or failure
+		  
+		});});
+
+});
+// /post/(?P<id>[0-9]{1,})/like/ name=like
+// $('sdf').c{
+	
+// 	var url = $(this).attr('data-url');
+// 	$ajax({
+// 		url:url
+// 		succe:{
+// 		f
+// 		}
+// 	})
+// }
+</script>
+
+{% endblock %}

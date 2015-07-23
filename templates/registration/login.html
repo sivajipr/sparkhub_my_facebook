@@ -1,0 +1,24 @@
+{% extends "logbase.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class='container'>
+<div class='jumbotron'><h2>Hai... Very warm welcome to Statter. Here you can post your ideas, add events and can attend your friends events  </h2>
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab">Log in</a></li>
+        <li><a href="/" data-toggle="tab">Register</a></li>
+      </ul>
+    <form method="post" action="/login">{% csrf_token %}
+        <table border="0">
+              <div>
+              <ul class='the-buttons clearfix'>
+            <div>
+            <tr><th><label for="id_username">Username:</label></th><td>{{ form.username }}</td></tr>
+            <tr><th><label for="id_password" style='margin-top:20px'>Password:</label></th><td>{{ form.password }}</td></tr>
+            </div></ul></div></table>
+        <input type="submit" value="Login" />
+        <input type="hidden" name="next" value="/home" />
+        {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
+    </form>
+{% endblock %}

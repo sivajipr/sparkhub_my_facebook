@@ -1,0 +1,403 @@
+{% extends "base.html" %}
+{% load likecounter %}
+{% block content %}
+<div class="container" style='background:white'>
+	<div class="row" style='margin-top:80px'>
+		<div class="col-md-7">
+			<div class="row">
+				<div class="col-md-12">
+					<font size='4' style='text-transform: capitalize'>
+					<div class='image' style='margin-bottom: 15px;'>
+					<a class="UploadButton">
+					<i class="fa fa-camera-retro fa-3x camera"></i>
+					</a>
+
+						<a href="/media/{{ entity.profile.get_cover }}" data-featherlight="image">
+						<img width="635" class='shadow' height="250" src="/media/{{ entity.profile.get_cover }}" /></a>
+						{% if user != entity %}
+						{% if not frnd %}
+
+	
+						<a type="button" data-type='post' class="addfrnd-btn button medium-btn addfriend" data-url="{% url 'addfriend' entity.id %}" style="cursor:pointer">
+						<font size='3' style='margin-bottom:10px'>
+						Add Friend
+						</font>
+						</a>
+						{% endif %}
+						{% endif %}
+						<h2 style='margin-left: 175px; margin-top:-1px;' >{{entity.get_full_name}}</h2>
+					</div></font>
+				<a href="/media/{{ entity.profile.get_avatar }}" data-featherlight="image">
+				<img class="img-circle-page image-popup-vertical-fit" width="50" style="float:left; margin-top:-135px; margin-left:12px; position:relative; "height="50" src="/media/{{ entity.profile.get_avatar }}" />
+				</a>
+				<a type="url" href='/{{entity}}/photos'>
+					<font style='cursor:pointer; padding-left:10px' size="2">Photos</font></a>
+				<a type="url" href='/{{entity}}/friends'>
+					<font style='cursor:pointer; padding-left:10px' size="2">Friends</font></a>
+				{% ifequal user entity %}
+				<a type="url" href='/{{entity}}/friend_request'>
+					<font style='cursor:pointer; padding-left:10px;position:relative' size="2">Friend requests
+					{% ifnotequal number_of_requests 0 %}
+					<font class='request' color="red">{{number_of_requests}}</font>
+					
+					{% endifnotequal %}
+					</font></a>
+				{% endifequal %}
+				</div>
+			</div>
+			<div class="row" style='margin-top:20px'>
+				<div class="col-md-3">
+					<div class="jumbotron" style="padding:15px">
+					<div style= 'margin-bottom: 7px;'>
+						<i class="fa fa-pencil-square-o"></i>
+						<a target="_top" href="/event/createevent">Addevents</a>
+					</div>
+					<div>
+						<i class="fa fa-pencil-square-o"></i>
+						<a target="_top" href="/post/createpost">Addpost</a>
+					</div>
+					</div>
+				</div>
+				<div class="col-md-9" style="padding-right:35px">
+					{% for post in posts %}
+	<div class="all-posts">
+		<div class='jumbotron pad' style="margin-bottom:10px;padding:5px !important">
+		<p style='margin-bottom:0px; float:left; width:100%'>
+				<img  border="2" class="img-circle image-popup-vertical-fit" width="50" style="float:left";height="50" src="/media/{{ post.user.profile.get_avatar }}" />
+				<font size="2" color='#4169E1' class='username'>
+					<a href="{{post.user}}" type='url' style='cursor:pointer;' class='user-page'>
+					{{post.user.get_full_name}}
+					</a>
+					</font>
+
+				<font size="1" color='grey' style='float:right;padding:2px'>{{post.create_date}}</font></p>
+
+				{% for attach in post.get_attach %}
+
+					<p><a href="{{ attach.url }}" data-featherlight="image">
+					<img class= 'image-popup-vertical-fit' style="padding-top:10px" border="2" width="150" height="150" src="{{ attach.url }}" />
+					</a></p>
+				{% endfor %}
+				<p><font size="2" style='margin-left:5px;margin-bottom:0px'>{{post.text}}</font></p>
+				<span class="glyphicon glyphicon-thumbs-up"></span>
+				<font class="like" style='margin-bottom:1px;margin-top:1px;margin-right:5px'><font size="2"></font>{{post.get_likecount}}</font>
+				<div class="btn-group" role="group" aria-label="...">
+				{% if post|actioncounts:user %}
+					<a type="url" data-type='post' class="unlike-btn" data-url="{% url 'post-unlike' post.id %}">
+					<font style='cursor:pointer; padding-right:3px' size="2">Unlike</font></a>
+					{% else %}
+					<a type="url" data-type='post' class="like-btn" data-url="{% url 'post-like' post.id %}">
+					<font style='cursor:pointer; padding-right:3px' size="2">Like</font></a>
+					{% endif %}
+				<a type="button" name="polik" size="10px" data-type='post' data-url="{% url 'post-comment' post.id %}" class="comment-btn"><font style='cursor:pointer' size="2">Comment</font></a>
+			</div>
+			<hr style="margin-top:0px">
+			<div style='background:white; margin-top:0px; margin-bottom:0px' class="comments">
+			{% for comment in post.get_comments %}
+			<p style='margin-left:0px;margin-bottom:1px' class="comment">
+			<img  class="img-circle-comment image-popup-no-margins" border="2" width="25" height="40" src="media/{{ comment.user.profile.get_avatar }}" />
+			<font size="2" color='#4169E1'>{{comment.user.get_full_name}}</font>
+			<font size="1" color='grey' style='float:right;padding:2px'>{{comment.create_date}}</font>
+			<font size="2">{{comment.comment}}</font></p>
+
+			<hr style="margin-top:0px;margin-bottom:0px">
+
+			{% endfor %}
+			</div>
+			<p><input type="text" class='value enter_key' data-type='post' data-url="{% url 'post-comment' post.id %}" style=" background:white; margin-top:10px;width:445px;height:30px;font-size:15px" /></p>
+
+		</div>
+	</div>
+	{% endfor %}
+	</div></div></div>
+			<div>
+				<div class="col-md-5 padd">
+					<div class='row'>
+					<div class="col-md-6">
+					<a href="/media/{{entity.profile.get_avatar}}" data-featherlight="image">
+					<div class="jumbotrom padd">Profile
+						<div id="container">           
+							<div class="stack twisted">	
+								<img class= 'image-popup-vertical-fit' style="padding-top:10px" border="2" width="150" height="150" src="/media/{{entity.profile.get_avatar}}" />
+	 	    				</div>
+						</div>
+					</div>
+				</div>
+					<div class="col-md-6">
+					<a href="/media/{{entity.profile.get_cover}}" data-featherlight="image">
+					<div class="jumbotrom padd">Cover
+						<div id="container">           
+							<div class="stack twisted">
+								<img class= 'image-popup-vertical-fit' style="padding-top:10px" border="2" width="150" height="150" src="/media/{{entity.profile.get_cover}}" />
+	 	    				</div>
+						</div>
+					</div>
+					</div>
+					</div>
+					</div>
+					<div class="col-md-5 padd">
+					<div class='row mar'>
+					<div class="col-md-6">
+					<a href="{{gal.url}}" data-featherlight="image">
+					<div class="jumbotrom padd">Post
+						<div id="container">           
+							<div class="stack twisted">	
+	        					<img src="{{gal.url}}" />
+	 	    				</div>
+						</div>
+					</div>
+					</div>
+					<div class="col-md-6">
+					<a href="{{pic.url}}" data-featherlight="image">
+					<div class="jumbotrom padd">Event
+						<div id="container">           
+							<div class="stack twisted">	
+	        					<img src="{{pic.url}}" />
+	 	    				</div>
+						</div>
+					</div>
+					</div>
+					</div>
+					</div>
+					</div>
+<!-- 			<div class="col-md-5 padd">profile
+					<div class="jumbotrom padd">
+											<div id="container">           
+							<div class="stack twisted">	
+	        					<img src="/media/cover-photo.jpg" />
+	 	    				</div>
+						</div>
+						{% for image in images %}
+							{% if image %}
+							{% ifequal entity image.user %}
+								<img class= 'image-popup-vertical-fit' style="padding-top:10px" border="2" width="150" height="150" src="/media/{{image.profile_pic}}" />
+							{% endifequal%}
+							{% endif %}
+						{% endfor %}
+					</div></div>
+			<div class="col-md-5 padd">Cover
+					<div class="jumbotrom padd">
+						{% for image in images %}
+							{% ifequal entity image.user %}
+								<img class= 'image-popup-vertical-fit' style="padding-top:10px" border="2" width="150" height="150" src="/media/{{image.cover_pic}}" />
+							{% endifequal%}
+						{% endfor %}
+					</div></div>
+			<div class="col-md-5 padd">post
+					<div class="jumbotrom padd">
+						{% for post in entity.profile.get_post %}
+						{% for attach in post.get_attach %}
+						<a href="{{attach.url}}" data-featherlight="image">
+						<img class= 'image-popup-vertical-fit' style="padding-top:10px" border="2" width="150" height="150" src="{{attach.url}}" />
+						</a>
+						{% endfor %}
+						{% endfor %}
+					</div>
+			</div>
+			<div class="col-md-5 padd">evnt
+					<div class="jumbotrom padd">
+						{% for event in entity.profile.get_event %}
+						{% for attach in event.get_attach %}
+						<a href="{{attach.url}}" data-featherlight="image">
+						<img class= 'image-popup-vertical-fit' style="padding-top:10px" border="2" width="150" height="150" src="{{attach.url}}" />
+						</a>
+						{% endfor %}
+						{% endfor %}
+					</div>
+			</div>
+ -->		</div>
+	</div>
+
+
+
+
+
+
+
+<!-- 
+<div class="container" style='background:white'>
+	<div class="row" style='margin-top:20px'>
+		<div class="col-md-2"><div class="jumbotron" style="padding-left:10px">
+	<a target="_top" href="/event/createevent">Add events</a>
+	<a target="_top" href="/post/createpost">Add post</a>
+</div></div>
+<div class="col-md-5">
+{% for post in posts %}
+	<div class="all-posts">
+		<div class='jumbotron pad' style="margin-bottom:10px;padding:5px !important">
+		<p style='margin-bottom:0px; float:left; width:100%'>
+				<img  border="2" class="img-circle image-popup-vertical-fit" width="50" style="float:left";height="50" src="/media/{{ post.user.profile.get_avatar }}" />
+				<font size="2" color='#4169E1' style='float:left;padding:4px'>
+					<a href="{{post.user}}" type='url' style='cursor:pointer;' class='user-page'>
+					{{post.user.get_full_name}}
+					</a>
+					</font>
+
+				<font size="1" color='grey' style='float:right;padding:2px'>{{post.create_date}}</font></p>
+
+				{% for attach in post.get_attach %}
+
+					<p><a href="{{ attach.url }}" data-featherlight="image">
+					<img class= 'image-popup-vertical-fit' style="padding-top:10px" border="2" width="150" height="150" src="{{ attach.url }}" />
+					</a></p>
+				{% endfor %}
+				<p><font size="2" style='margin-left:5px;margin-bottom:0px'>{{post.text}}</font></p>
+				<span class="glyphicon glyphicon-thumbs-up"></span>
+				<font class="like" style='margin-bottom:1px;margin-top:1px;margin-right:5px'><font size="2"></font>{{post.get_likecount}}</font>
+				<div class="btn-group" role="group" aria-label="...">
+				{% if post|actioncounts:user %}
+					<a type="url" data-type='post' class="unlike-btn" data-url="{% url 'post-unlike' post.id %}">
+					<font style='cursor:pointer; padding-right:3px' size="2">Unlike</font></a>
+					{% else %}
+					<a type="url" data-type='post' class="like-btn" data-url="{% url 'post-like' post.id %}">
+					<font style='cursor:pointer; padding-right:3px' size="2">Like</font></a>
+					{% endif %}
+				<a type="button" name="polik" size="10px" data-type='post' data-url="{% url 'post-comment' post.id %}" class="comment-btn"><font style='cursor:pointer' size="2">Comment</font></a>
+			</div>
+			<hr style="margin-top:0px">
+			<div style='background:white; margin-top:0px; margin-bottom:0px' class="comments">
+			{% for comment in post.get_comments %}
+			<p style='margin-left:0px;margin-bottom:1px' class="comment">
+			<img  class="img-circle-comment image-popup-no-margins" border="2" width="25" height="40" src="media/{{ comment.user.profile.get_avatar }}" />
+			<font size="2" color='#4169E1'>{{comment.user.get_full_name}}</font>
+			<font size="1" color='grey' style='float:right;padding:2px'>{{comment.create_date}}</font>
+			<font size="2">{{comment.comment}}</font></p>
+
+			<hr style="margin-top:0px;margin-bottom:0px">
+
+			{% endfor %}
+			</div>
+			<p><input type="text" class='value enter_key' data-type='post' data-url="{% url 'post-comment' post.id %}" style=" background:white; margin-top:10px;width:445px;height:30px;font-size:15px" /></p>
+
+		</div>
+	</div>
+	{% endfor %}
+</div>
+</div></div>	 -->
+<script type="text/javascript" src="/static/js/ajaxupload.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	console.log('sdsfsdg');
+	$(".enter_key").keypress(function (e) {
+    	var code = (e.keyCode ? e.keyCode : e.which)
+    	if(code == 13) {1
+	    	var url = $(this).attr("data-url");
+			var type = $(this).attr("data-type");
+			var text = $(this).closest('div.all-posts').find(".value").val()
+			var elem = $(this).parent().parent().find('.comments');
+			var rem = $('.comment');
+
+			console.log(elem);
+			
+			$.ajax({
+			    url: url,
+			    data: {'text':text},
+			    type: "POST",
+			    success: function( data ) {
+			        rem.children("p:first").remove();
+			        elem.append(data);
+			    },
+
+			});
+		};
+    	});
+	$(document).on("click",".like-btn",function(){
+		var url = $(this).attr("data-url");
+		var type = $(this).attr("data-type");
+		var elem = $(this).closest('div.all-posts').find('.like');
+		var t = this;
+		$.ajax({
+
+		    url: url,
+		 
+		    type: "POST",
+		 
+		    success: function( data ) {
+		        $(t).css("cursor", "progress");
+		        $(elem).html(data.count);
+		        $(t).removeClass('like-btn');
+		        $(t).addClass('unlike-btn');
+		        $(t).text('Unlike');
+		        $(t).attr("data-url",data.url);
+		        $(t).css("cursor", "pointer");
+
+		    },
+ 
+		});
+	});
+
+	$(document).on("click",".unlike-btn",function(){
+		var url = $(this).attr("data-url");
+		var type = $(this).attr("data-type");
+		var elem = $(this).closest('div.all-posts').find('.like');
+		var t = this;
+
+		$.ajax({
+
+		    url: url,
+		 
+		    type: "POST",
+		 
+		    success: function( data ) {
+		    	$(t).css("cursor", "progress");
+		        $(elem).html(data);
+		        $(t).removeClass('unlike-btn');
+		        $(t).addClass('like-btn');
+		        $(t).text('Like');
+		        $(t).attr("data-url",data.url);
+		        $(t).css("cursor", "pointer");
+		    },
+
+		    error: function(data){
+		    	console.log('ghhghghghghghgh');
+		    	console.log(data.error);
+		    }
+ 
+		});
+	});
+	$(".addfrnd-btn").click(function(){
+		console.log("freee_space");
+		var url = $(this).attr("data-url");
+		var type = $(this).attr("data-type");
+		$.ajax({
+			url:url,
+
+			type:"POST",
+
+			success: function( data ) {
+				location.reload()
+				console.log(data)
+			},
+
+		});
+	});
+	
+	$(".comment-btn").click(function(){
+    	var url = $(this).attr("data-url");
+		var type = $(this).attr("data-type");
+		var text = $(this).closest('div.all-posts').find(".value").val()
+		var elem = $(this).closest('div.all-posts').find('.comment');
+		$.ajax({
+
+ 
+		    url: url,
+		 
+		    data: {'text':text},
+		 
+		    type: "POST",
+		 
+		    success: function( data ) {
+		        $(elem).html(data);
+		        location.reload();
+		    },
+	  
+		});});
+	$(".user-page").click(function(){
+
+	})
+});
+  
+ 
+  
+</script>
+{% endblock %}

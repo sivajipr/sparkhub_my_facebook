@@ -1,0 +1,26 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('users', '0009_friend'),
+    ]
+
+    operations = [
+        migrations.AddField(
+            model_name='friend',
+            name='create_date',
+            field=models.DateTimeField(auto_now_add=True, null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='friend',
+            name='status',
+            field=models.IntegerField(default=0),
+            preserve_default=True,
+        ),
+    ]

@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% load likecounter %}
+{% block content %}
+<div class="container"  style='background:white'>
+	<div class="row" style='margin-top:80px'>
+		<div class="col-md-2"><div class="jumbotron" style="padding-left:10px">
+	<a target="_top" href="/event/createevent">Add events</a>
+	<a target="_top" href="/post/createpost">Add post</a>
+</div></div>
+<div class="col-md-5">
+{% for post in posts %}
+	<div class="all-posts">
+		<div class='jumbotron pad' style="margin-bottom:10px;padding:5px !important">
+		<p style='margin-bottom:0px; float:left; width:100%'>
+				<img  border="2" class="img-circle image-popup-vertical-fit" width="50" style="float:left";height="50" src="/media/{{ post.user.profile.get_avatar }}" />
+				<font class='username' size="2" color='#4169E1'>
+					<a href="{{post.user}}" type='url' style='cursor:pointer;' class='user-page'>
+					{{post.user.get_full_name}}
+					</a>
+					</font>
+
+				<font size="1" color='grey' style='float:right;padding:2px'>{{post.create_date}}</font></p>
+
+				{% for attach in post.get_attach %}
+
+					<a href="{{ attach.url }}" data-featherlight="image">
+					<img class= 'image-popup-vertical-fit' style="padding-top:10px" border="2" width="140" height="140" src="{{ attach.url }}" />
+					</a>
+				{% endfor %}
+				<p><font size="2" style='margin-left:5px;margin-bottom:0px'>{{post.text}}</font></p>
+				<span class="glyphicon glyphicon-thumbs-up"></span>
+				
+				<font class="like" style='margin-bottom:1px;margin-top:1px;margin-right:5px'>
+				{% ifnotequal post.get_likecount 0 %}
+				{{post.get_likecount}}
+				{% endifnotequal %}
+				</font>
+
+				<div class="btn-group" role="group" aria-label="...">
+				{% if post|actioncounts:user %}
+					<a type="url" data-type='post' class="unlike-btn" data-url="{% url 'post-unlike' post.id %}">
+					<font style='cursor:pointer; padding-right:3px' size="2">Unlike</font></a>
+					{% else %}
+					<a type="url" data-type='post' class="like-btn" data-url="{% url 'post-like' post.id %}">
+					<font style='cursor:pointer; padding-right:3px' size="2">Like</font></a>
+					{% endif %}
+				<a type="button" name="polik" size="10px" data-type='post' data-url="{% url 'post-comment' post.id %}" class="comment-btn"><font style='cursor:pointer' size="2">Comment</font></a>
+			</div>
+			<hr style="margin-top:0px">
+			<div style='background:white; margin-top:0px; margin-bottom:0px' class="comments">
+			{% for comment in post.get_comments %}
+			<p style='margin-left:0px;margin-bottom:1px' class="comment">
+			<img  class="img-circle-comment image-popup-no-margins" border="2" width="25" height="40" src="/media/{{ comment.user.profile.get_avatar }}" />
+			<font size="2" color='#4169E1'>
+				<a href="{{comment.user}}" type='url' style='cursor:pointer;' class='user-page'>
+					{{comment.user.get_full_name}}
+				</a>
+			</font>
+			<font size="1" color='grey' style='float:right;padding:2px'>{{comment.create_date}}</font>
+			<font size="2">{{comment.comment}}</font></p>
+
+			<hr style="margin-top:0px;margin-bottom:0px">
+
+			{% endfor %}
+			</div>
+			<p><input type="text" class='value enter_key' data-type='post' data-url="{% url 'post-comment' post.id %}" style=" background:white; margin-top:10px;width:445px;height:30px;font-size:15px" /></p>
+
+		</div>
+	</div>
+	{% endfor %}
+</div>
+</div></div>	
+<script>
+$(document).ready(function(){
+	$(".enter_key").keypress(function (e) {
+    	var code = (e.keyCode ? e.keyCode : e.which)
+    	if(code == 13) {1
+	    	var url = $(this).attr("data-url");
+			var type = $(this).attr("data-type");
+			var text = $(this).closest('div.all-posts').find(".value").val()
+			var elem = $(this).parent().parent().find('.comments');
+			var rem = $('.comment');
+
+			console.log(elem);
+			
+			$.ajax({
+			    url: url,
+			    data: {'text':text},
+			    type: "POST",
+			    success: function( data ) {
+			        rem.children("p:first").remove();
+			        elem.append(data);
+			        elem.val("");
+			    },
+
+			});
+		};
+    	});
+	 $(document).on("click",".like-btn",function() {
+		var url = $(this).attr("data-url");
+		var type = $(this).attr("data-type");
+		var elem = $(this).closest('div.all-posts').find('.like');
+		var t = this;
+		$.ajax({
+
+		    url: url,
+		 
+		    type: "POST",
+		 
+		    success: function( data ) {
+		        $(t).css("cursor", "progress");
+		        $(elem).html(data.count);
+		        $(t).removeClass('like-btn');
+		        $(t).addClass('unlike-btn');
+		        $(t).html('Unlike');
+		        $(t).attr("data-url",data.url);
+		        $(t).css("cursor", "pointer");
+		    
+
+		    },
+ 
+		});
+	});
+
+	$(document).on("click",".unlike-btn",function(){
+		var url = $(this).attr("data-url");
+		var type = $(this).attr("data-type");
+		var elem = $(this).closest('div.all-posts').find('.like');
+		var t = this;
+
+		$.ajax({
+
+		    url: url,
+		 
+		    type: "POST",
+		    
+		    success: function( data ) {
+		    	$(t).css("cursor", "progress");
+		        if(data.count != '0'){
+		        	$(elem).html(data.count);
+		        }
+		        else {$(elem).html('');}
+		        $(t).removeClass('unlike-btn');
+		        $(t).addClass('like-btn');
+		        $(t).text('Like');
+		        $(t).attr("data-url",data.url);
+		        $(t).css("cursor", "pointer");
+		    },
+
+		    error: function(data){
+		    	console.log('ghhghghghghghgh');
+		    	console.log(data.error);
+		    }
+ 
+		});
+	});
+	
+	$(".comment-btn").click(function(){
+    	var url = $(this).attr("data-url");
+		var type = $(this).attr("data-type");
+		var text = $(this).closest('div.all-posts').find(".value").val()
+		var elem = $(this).closest('div.all-posts').find('.comment');
+		$.ajax({
+
+ 
+		    url: url,
+		 
+		    data: {'text':text},
+		 
+		    type: "POST",
+		 
+		    success: function( data ) {
+		        $(elem).html(data);
+		        location.reload();
+		    },
+	  
+		});});
+});
+  
+ 
+  
+</script>
+{% endblock %}

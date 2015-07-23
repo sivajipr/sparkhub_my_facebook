@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class='container'>
+	<div class="row" style='margin-top:80px'>
+		<div class="col-md-2"><div class="jumbotron" style="padding-left:10px">
+	<a target="_top" href="/createevent">Add events</a>
+	<a target="_top" href="/post">Add post</a>
+</div></div>
+<div class="col-md-5">
+{% for event in events %}
+<div class='jumbotron'><p>{{event.title}}</p>
+<p><font size='2'>Starts on '{{event.start_date}}' and ends on '{{event.end_date}} created on '{{event.create_date}}'</font></p>
+</div>{% endfor %}</div></div></div>
+{% endblock %}

@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% load likecounter %}
+{% block content %}
+<div class="container"  style='background:white'>
+	<div class="row" style='margin-top:80px'>
+		<div class="col-md-2"><div class="jumbotron" style="padding-left:10px">
+	<a target="_top" href="/event/createevent">Add events</a>
+	<a target="_top" href="/post/createpost">Add post</a>
+</div></div>
+<div class="col-md-5">
+{% for event in events %}
+	<div class="all-events">
+		<div class='jumbotron pad' style="margin-bottom:10px;padding:5px !important">
+		<p style='margin-bottom:0px; float:left; width:100%'>
+				<img  border="2" class="img-circle" width="50" style="float:left";height="50" src="/media/{{ event.user.profile.get_avatar }}" />
+				<font size="2" color='#4169E1' style='float:left;padding:4px'>{{event.user.get_full_name}}</font>
+				<font size="1" color='grey' style='float:right;padding:2px'>{{event.create_date}}</font></p>
+				<div class="row" style='margin-top:20px;margin-left:10px'>
+				<div class="col-md-4">
+				{% if event.get_attach %}
+				{% for attach in event.get_attach %}
+
+					<p><a href="{{ attach.url }}" data-featherlight="image">
+					<img class= 'image-popup-vertical-fit' style="padding-top:10px" border="2" width="150" height="150" src="{{ attach.url }}" />
+					</a>
+				{% endfor %}
+				{% else %}
+					<img class= 'image-popup-vertical-fit' style="padding-top:10px" border="2" width="150" height="150" src="/media/event.png" />
+				{% endif %}
+				</div>
+				<div class="col-md-1"></div>
+				<div class="col-md-5" style='margin-top:30px'>
+				{% if user in event.get_attendies %}
+				<p><font size="3" style='text-transform: capitalize;margin-left:5px;margin-bottom:0px'>
+				{{event.title}}</font></p>
+				<p><font size="2" style='margin-left:5px;margin-bottom:0px'>
+				Starts on {{event.start_date}}</font></p>
+				<p><font size="2" style='margin-left:5px;margin-bottom:0px'>
+				Ends on {{event.end_date}}</font></p>
+				{% else %}
+				<p><font size="3" style='text-transform: capitalize;margin-left:5px;margin-bottom:0px'>
+				{{event.title}}</font></p>
+				<p><font size="2" style='margin-left:5px;margin-bottom:0px'>
+				Starts on {{event.start_date}}</font></p>
+				<p><font size="2" style='margin-left:5px;margin-bottom:0px'>
+				Ends on {{event.end_date}}</font></p>
+				<a href="/event/attend/{{event.id}}"><input type='submit' value='Attend' /></a>
+				{% endif %}</font></p></div></div>
+				<span class="glyphicon glyphicon-thumbs-up"></span></font>
+				<font class="like" style='margin-bottom:1px;margin-top:1px;margin-right:5px'><font size="2"></font>{{event.get_eventlikecount}}</font>
+				<div class="btn-group" role="group" aria-label="...">
+				{% if event|actioncountseve:user %}
+					<a type="url" data-type='post' class="unlike-btn" data-url="{% url 'event-unlike' event.id %}">
+					<font style='cursor:pointer; padding-right:3px' size="2">Unlike</font></a>
+					{% else %}
+					<a type="url" data-type='post' class="like-btn" data-url="{% url 'event-like' event.id %}">
+					<font style='cursor:pointer; padding-right:3px' size="2">Like</font></a>
+				{% endif %}
+				<a type="url" size="10px" data-type='post' class ="comment-btn" data-url="{% url 'event-comment' event.id %}"><font style='cursor:pointer' size="2">Comment</font></a>
+				</div></p>
+				<hr style="margin-top:0px">
+				<div style='background:white; margin-top:0px; margin-bottom:0px' class="comments">
+				{% for comment in event.get_comments %}
+				{% ifequal comment.event.id event.id %}
+				<p style='margin-left:0px;margin-bottom:1px' class="comment">
+				<img  class="img-circle-comment" border="2" width="25" height="40" src="/media/{{ comment.user.profile.get_avatar }}" />
+				<font size="2" color='#4169E1'>{{comment.user.get_full_name}}</font>
+				<font size="1" color='grey' style='float:right;padding:2px'>{{comment.create_date}}</font>
+				<font size="2">{{comment.comment}}</font></p>
+
+				<hr style="margin-top:0px;margin-bottom:0px">
+				{% endifequal %}
+				{% endfor %}</div>
+				
+				<p><input type="text" data-type='post' data-url="{% url 'event-comment' event.id %}" class='value enter_key' style=" background:white; margin-top:10px;width:445px;height:30px;font-size:15px" /></p>
+
+</div></div>
+	{% endfor %}</div></div></div>
+
+
+<script>
+$(document).ready(function(){
+	console.log('000000000000000000')
+	$(".like-btn").click(function(){
+		var url = $(this).attr("data-url");
+		var type = $(this).attr("data-type");
+		var elem = $(this).closest('div.all-events').find('.like');
+		var t = this;
+		$.ajax({
+
+		    url: url,
+		 
+		    type: "POST",
+		 
+		    success: function( data ) {
+		        console.log(data.url)
+		        $(elem).html(data.count);
+		        $(t).removeClass('like-btn');
+		        $(t).addClass('unlike-btn');
+		        $(t).text('Unlike');
+		        $(t).attr("data-url",data.url);
+
+		    },
+ 
+		});
+	});
+
+	$(".unlike-btn").click(function(){
+		var url = $(this).attr("data-url");
+		var type = $(this).attr("data-type");
+		var elem = $(this).closest('div.all-events').find('.like');
+		var t = this;
+
+		$.ajax({
+
+		    url: url,
+		 
+		    type: "POST",
+		 
+		    success: function( data ) {
+		    	console.log(data.url)
+		        $(elem).html(data);
+		        $(t).removeClass('unlike-btn');
+		        $(t).addClass('like-btn');
+		        $(t).text('Like');
+		        $(t).attr("data-url",data.url);
+		    },
+
+		    error: function(data){
+		    	console.log('ghhghghghghghgh');
+		    	console.log(data.error);
+		    }
+ 
+		});
+	});
+	$(".enter_key").keypress(function (e) {
+		console.log('aaaaaaaaaaaaaa');
+    	var code = (e.keyCode ? e.keyCode : e.which)
+    	if(code == 13) {
+    		console.log('bbbbbbbbbbbbbbb');
+	    	var url = $(this).attr("data-url");
+			var type = $(this).attr("data-type");
+			var text = $(this).closest('div.all-events').find(".value").val()
+			var elem = $(this).parent().parent().find('.comments');
+			console.log(url)
+			
+			$.ajax({
+			    url: url,
+			    data: {'text':text},
+			    type: "POST",
+			    success: function( data ) {
+			        elem.append(data);
+			        // location.reload();
+			    },
+
+			});
+		};
+    	});
+	$(".comment-btn").click(function(){
+       	$(".box").show();
+		var url = $(this).attr("data-url");
+		var type = $(this).attr("data-type");
+		var text = $(this).closest('div.all-events').find(".value").val()
+		var elem = $(this).closest('div.all-events').find('.comment');
+		$.ajax({
+
+ 
+		    // The URL for the request
+		    url: url,
+		 
+		    // The data to send (will be converted to a query string)
+		    data: {'text':text},
+		 
+		    // Whether this is a POST or GET request
+		    type: "GET",
+		 
+		    // The type of data we expect back
+		 
+		    // Code to run if the request succeeds;
+		    // the response is passed to the function
+		    success: function( data ) {
+		        console.log('fsddddddddddd');
+		        console.log(data);
+		        $(elem).html(data);
+		 
+
+		        //$('.like').html(data);
+		    },
+
+		 //    error: function(jqXHR, textStatus, errorThrown) {
+  	// 			console.log('sdfgva');
+			// },
+		 
+		    // Code to run if the request fails; the raw request and
+		    // status codes are passed to the functio
+		 
+		    // Code to run regardless of success or failure
+		  
+		});});
+
+});
+	
+</script>
+
+{% endblock %}

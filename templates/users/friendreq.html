@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container"  style='background:white'>
+	<div class="row" style='margin-top:80px'>
+		<div class="col-md-2"><div class="jumbotron" style="padding-left:10px">
+	<a target="_top" href="/event/createevent">Add events</a>
+	<a target="_top" href="/post/createpost">Add post</a>
+</div></div>
+<div class="col-md-5">
+	{% for friend in friends %}
+		<div class='jumbotron pad' style="margin-bottom:10px;padding:5px !important">
+		<p style='margin-bottom:0px; float:left; width:100%'>
+				<img  border="2" class="image-popup-vertical-fit usersearchpic" src="/media/{{ friend.creator.profile.get_avatar }}" />
+				<font class='username' size="2" color='#4169E1'>
+					<a href="/{{friend.creator}}" type='url' style='cursor:pointer;' class='user-page'>
+					{{friend.creator.get_full_name}}
+					</a>
+					</font>
+				<div class="btn-group" role="group" aria-label="...">
+					
+					<a type="url" data-type='post' class="accept-btn" data-url="{% url 'accept' friend.id %}">
+					<font style='cursor:pointer; padding-right:3px' size="2">Accept</font></a>
+
+					<a type="button" data-type='post' class="reject-btn" data-url="{% url 'reject' friend.id %}">
+					<font style='cursor:pointer; padding-right:3px' size="2">Reject</font></a>
+			</div>
+		</div>
+{% endfor %}
+</div></div></div>
+<script>
+$(document).ready(function(){
+	console.log('sdsfsdg');
+	$(".accept-btn").click(function(){
+		console.log('acceptclicked');
+		var url = $(this).attr("data-url");
+		var type = $(this).attr("data-type");
+		console.log(url);
+		$.ajax({
+			url: url,
+
+			success: function( data ) {
+		        location.reload();
+		}
+
+	});
+});
+	$(".reject-btn").click(function(){
+		console.log('rejectclicked');
+		var url = $(this).attr("data-url");
+		var type = $(this).attr("data-type");
+		console.log(url);
+		$.ajax({
+			url: url,
+
+			success: function( data ) {
+		        location.reload();
+		}
+
+	});
+});
+});
+</script>
+{% endblock %}

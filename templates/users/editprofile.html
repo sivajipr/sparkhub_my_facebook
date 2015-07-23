@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+ <div class='container'>
+<div class='jumbotron' style="margin-top:80px">
+<form method='post' action='/users/editprofile' enctype="multipart/form-data">{% csrf_token %}
+<table boarder="2">
+			<tr><th><label class="fs" for="id_username">First Name:</label></th><td>{{ form1.first_name }}</td></tr>
+			<tr><th><label class="fs" for="id_lastname">Last Name:</label></th><td>{{ form1.last_name }}</td></tr>
+			<tr><th><label class="fs" for="id_email_id">Email:</label></th><td>{{ form1.email }}</td></tr>
+			<tr><th><label class="fs" for="id_place">Place:</label></th><td>{{ form2.place }}</td></tr>
+			<tr><th><label class="fs" for="id_profile_pic">Profile pic</label></th><td>{{ form3.profile_pic }}</td></tr>
+			<tr><th><label class="fs" for="id_cover_pic">Cover pic</label></th><td>{{ form3.cover_pic }}</td></tr>
+
+</table><input type='submit' value='ok' /></form>
+</div></div>
+
+{{form1.errors}}
+
+{{form2.errors}}
+
+{{form3.errors}}
+
+{% endblock %}

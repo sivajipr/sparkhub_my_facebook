@@ -1,0 +1,28 @@
+{% extends "logbase.html" %}
+{% block content %}
+ <div class='container'>
+<div class='jumbotron'><h2>Hai... Very warm welcome to Statter. Here you can post your ideas, add events and can attend your friends events  </h2>
+      <ul class="nav nav-tabs">
+        <li><a href="login" data-toggle="tab">Log in</a></li>
+        <li class="active"><a data-toggle="tab">Register</a></li>
+      </ul>
+       <p>
+			<form method='post' action='/'>{% csrf_token %}
+			<!-- {% for i in form %}
+			<p>{{i}}</p>
+			{% endfor %} -->
+			<table boarder="2">
+			<div>
+			<tr><th><label class="fs" for="id_username">User Name:</label></th><td>{{ form.username }}</td></tr>
+			<tr><th><label class="fs" for="id_firstname">First Name:</label></th><td>{{ form.first_name }}</td></tr>
+			<tr><th><label class="fs" for="id_lastname">Last Name:</label></th><td>{{ form.last_name }}</td></tr>
+			<tr><th><label class="fs" for="id_email_id">Email:</label></th><td>{{ form.email }}</td></tr>
+			<tr><th><label class="fs" for="id_password1">password:</label></th><td>{{ form.password1 }}</td></tr>
+			<tr><th><label class="fs" for="id_password2">Renter your password:</label></th><td>{{ form.password2 }}</td></tr>
+			</div></table>
+			<p><input type="submit" value="ok">
+		</p></form></p></div>
+	</div>
+	{{form.errors}}
+{% endblock %}
+{{form.errors}}

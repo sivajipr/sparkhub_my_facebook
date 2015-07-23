@@ -1,0 +1,330 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang='en'>
+    <head>
+    	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+        <title>SparkBook
+        </title>
+        <link href="/static/images/favicon2.ico" id="page_favicon" rel="icon" type="image/x-icon" />
+    	<meta name="generator" content="Bootply" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        <!-- date picker -->
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        <!-- autocomplete -->
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+		<!-- image popup -->
+		<link type="text/css" rel="stylesheet" href="http://sparklabs.in/design-projects/sivaji/release/featherlight.min.css" title="Featherlight Styles" />
+        <!-- image_gallery -->
+        <link rel="stylesheet" href="/static/css/style.css" />
+		<!--[if lt IE 9]>
+			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<script src="http://code.jquery.com/jquery-1.11.3.min.js" ></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    </head>
+    	<body bgcolor="#E6E6FA">
+        {% block head %}
+
+		<nav class="navbar navbar-inverse constant" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+       
+        </div>
+<div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-left ">
+            <li class='navbar-left'>
+            <img href="/static/images/spark.ico" id="page_favicon" rel="icon" type="image/x-icon" />
+            </li></ul>
+          <ul class="nav navbar-nav navbar-left ">
+			<li class='navbar-left' style="color:DarkGray"><font size='5'>Spark Hub</font></li></ul>
+            <ul class="nav navbar-nav search">
+            <li>
+            <form action="/usersearch">
+            <input class='tftextinput birds' type="search" name="name" style='width:285px' id="mySearch" placeholder="Find people">
+            <input class='tfbutton' type="submit" id="mybutton" value='search'>
+            </form></li></ul>
+			<ul class="nav navbar-nav navbar-right ">
+			<li><a class="navbar-brand" href="/home">Home</a></li>
+			<li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle navbar-brand">Posts<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        	<li><a href="/post/createpost">Add post</a></li>
+                        	<li><a href="/post/myposts">My Posts</a></li>
+                        	<li><a href="/home">All posts</a></li>
+                        </ul>
+            </li>
+
+			<li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle navbar-brand">Events<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        	<li><a href="/event/createevent">Add events</a></li>
+                        	<li><a href="/event/allevent">All events</a></li>
+                        	<li><a href="/event/myevent">My events</a></li>
+                            <li><a href="/event/attendingevent">Attending events</a></li>
+                        </ul>
+            </li>
+
+			 <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle navbar-brand">{{user}}<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/{{user}}">{{user}}</a></li>
+                            <li><a href="/users/editprofile">Edit profile</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/logout">logout</a></li>
+                        </ul>
+                    </li>
+			</ul></div></nav></div>
+
+
+
+
+
+
+<style>
+.fs{
+	font-size:15px;
+	margin-bottom:20px;
+}
+.pad{
+	padding-top: 5px;
+	padding-left: 5px !important;
+	padding-right: 5px !important;
+}
+.constant{
+	width:100%;
+	position:fixed;
+	z-index:11;
+}
+.img-circle{
+    overflow:hidden;
+    -webkit-border-radius:50px;
+    -moz-border-radius:50px;
+    border-radius:50px;
+    width:40px;
+    height:40px;
+}
+.img-circle-comment{
+    overflow:hidden;
+    -webkit-border-radius:50px;
+    -moz-border-radius:50px;
+    border-radius:50px;
+    width:30px;
+    height:30px;
+}
+.img-circle-page{
+    overflow:hidden;
+    -webkit-border-radius:50px;
+    -moz-border-radius:50px;
+    border-radius:100px;
+    width:150px;
+    height:150px;
+}
+.image { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+.positioning{
+  cursor:pointer;
+  float:left;
+  width:100%;
+  text-align:center;
+}
+h2 { 
+   position: absolute; 
+   top: 200px; 
+   left: 0; 
+   width: 100%;
+   color:white; 
+}
+.shadow{
+    -webkit-box-shadow: 10px 10px 9px -4px rgba(143,139,143,1);
+    -moz-box-shadow: 10px 10px 9px -4px rgba(143,139,143,1);
+    box-shadow: 10px 10px 9px -4px rgba(143,139,143,1);
+}
+.camera{ 
+      font-size: 25px;
+      z-index: 2;
+      position: absolute;
+      color: rgb(202, 208, 208);
+      margin-left: 600px;
+      margin-top: 8px;
+      cursor:pointer;
+}
+.padd{
+      padding-top: 0px;
+      padding-bottom: 0px;
+      padding-left: 0px;
+      padding-right: 0px;
+}
+.jumbotrom{
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+
+}
+.username{
+    float:left;
+    padding:12px;
+  margin-left: -7px;
+}
+.mar{
+    margin-top: 20px;
+}
+.search{
+    margin-top: 10px;
+    margin-left: 480px;
+}
+.tftextinput{
+    margin: 0;
+    padding: 5px 15px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:14px;
+    border:1px solid #0076a3; border-right:0px;
+    border-top-left-radius: 5px 5px;
+    border-bottom-left-radius: 5px 5px;
+}
+.request{
+  width: 28px;
+  position: absolute;
+  height: 37px;
+  top: -15px;
+  padding: 0px 11px 4px 8px;
+  background: url('/static/images/comment_box.png') no-repeat;
+  background-size: 100%;
+}
+.col-md-12 a{
+  line-height: 20px;
+}
+.tfbutton {
+    margin: 0;
+    padding: 5px 15px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size:14px;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    color: #ffffff;
+    border: solid 1px #0076a3; border-right:0px;
+    background: #0095cd;
+    background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
+    background: -moz-linear-gradient(top,  #00adee,  #0078a5);
+    border-top-right-radius: 5px 5px;
+    border-bottom-right-radius: 5px 5px;
+    }
+
+.usersearchpic{
+    float: left;
+    width: 150px !important;
+    height: 150px !important;
+}
+.sizing{
+      width: 21.3% !important;
+}
+.addfriend{
+    margin-left: 500px !important;
+    margin-top: -50px !important;
+}
+.button {
+    background-color: #c8b7b7;
+    padding: 3x;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+.medium-btn {
+    width: 110px;
+    height: 30px;
+}
+.img-circlea{
+    overflow:hidden;
+    -webkit-border-radius:25px;
+    -moz-border-radius:25px;
+    border-radius:25px;
+    width:20px;
+    height:20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+.tab-1{}
+.tab-1 th{vertical-align:middle; display:table-cell; padding-bottom:10px}
+.tab-1 td{vertical-align:middle; display:table-cell; padding-bottom:10px}
+
+
+
+
+
+</style>
+{% endblock %}
+
+        {% block content %}{% endblock %}
+	<script type="text/javascript">
+	$(document).ready(function(){
+$.ajaxSetup({ 
+     beforeSend: function(xhr, settings) {
+         function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie && document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i < cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     // Does this cookie string begin with the name we want?
+                 if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                     break;
+                 }
+             }
+         }
+         return cookieValue;
+         }
+         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+             // Only send the token to relative URLs i.e. locally.
+             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+         }
+     } 
+});});
+</script>
+<script src="http://sparklabs.in/design-projects/sivaji/assets/javascripts/jquery-1.7.0.min.js"></script>
+<script src="http://sparklabs.in/design-projects/sivaji/release/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/static/js/ajaxupload.js" ></script>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<style>
+  .ui-autocomplete-loading {
+    background: white url("static/images/LoadingCircle_finalani.gif") right center no-repeat;
+  }
+  </style>
+<script>
+  $(document).ready(function () {
+    $( ".birds" ).autocomplete({
+      source: '/autocomplete/',
+      minLength: 1,
+      create: function( event, ui ) {
+         $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
+                return $('<li>')
+                    .append('<a>' + '<img  border="2" class="img-circlea image-popup-vertical-fit" width="50" style="float:left";height="50" src="'+item.id+'" />' + item.label + '<br>' + '</a>')
+                    .appendTo(ul);
+            };   
+      }
+    });
+  });
+  </script>
+    </body>
+</html>

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container" style='background:white'>
+	<div class="row" style='margin-top:80px'>
+		<div class="col-md-7">
+			<div class="row">
+				<div class="col-md-12">
+					<font size='4' style='text-transform: capitalize'>
+					<div class='image' style='margin-bottom: 15px;'>
+					<a class="UploadButton" id="UploadButton">
+					<i class="fa fa-camera-retro fa-3x camera"></i>
+					</a>
+						<a href="/media/{{ entity.profile.get_cover }}" data-featherlight="image">
+						<img width="635" class='shadow' height="250" src="/media/{{ entity.profile.get_cover }}" /></a>
+						<h2 style='margin-left: 175px; margin-top:-1px;' >{{entity.get_full_name}}</h2>
+					</div></font>
+				<a href="/media/{{ entity.profile.get_avatar }}" data-featherlight="image">
+				<img class="img-circle-page image-popup-vertical-fit" width="50" style="float:left; margin-top:-105px; margin-left:12px; position:relative; "height="50" src="/media/{{ entity.profile.get_avatar }}" />
+				</a>
+				</div>
+			</div>
+			<div class="row" style='margin-top:20px'>
+				<div class="col-md-3">
+					<div class="jumbotron" style="padding:15px">
+					<div style= 'margin-bottom: 7px;'>
+						<i class="fa fa-pencil-square-o"></i>
+						<a target="_top" href="/event/createevent">Addevents</a>
+					</div>
+					<div>
+						<i class="fa fa-pencil-square-o"></i>
+						<a target="_top" href="/post/createpost">Addpost</a>
+					</div>
+					</div>
+				</div>
+				<div class="col-md-9 padd" style="padding-right:35px">
+					<div class='row'>
+					<div class="col-md-6">
+					<a href="/media/{{entity.profile.get_avatar}}" data-featherlight="image">
+					<div class="jumbotrom padd">Profile
+						<div id="container">           
+							<div class="stack twisted">	
+								<img class= 'image-popup-vertical-fit' style="padding-top:10px" border="2" width="150" height="150" src="/media/{{entity.profile.get_avatar}}" />
+	 	    				</div>
+						</div>
+					</div>
+				</div>
+					<div class="col-md-6">
+					<div class="jumbotrom padd">Cover
+						<div id="container">           
+							<div class="stack twisted">
+								<img class= 'image-popup-vertical-fit' style="padding-top:10px" border="2" width="150" height="150" src="/media/{{entity.profile.get_cover}}" />
+	 	    				</div>
+						</div>
+					</div>
+					</div>
+					</div>
+					</div>
+					<div class="col-md-3"></div>
+					<div class="col-md-9 padd" style="padding-right:35px">
+					<div class='row mar'>
+					<div class="col-md-6">
+					<div class="jumbotrom padd">Post
+						<div id="container">           
+							<div class="stack twisted">	
+	        					<img src="{{gal.url}}" />
+	 	    				</div>
+						</div>
+					</div>
+					</div>
+					<div class="col-md-6">
+					<div class="jumbotrom padd">Event
+						<div id="container">           
+							<div class="stack twisted">	
+	        					<img src="{{pic.url}}" />
+	 	    				</div>
+						</div>
+					</div>
+					</div>
+					</div>
+					</div>
+					<div class="col-md-3"></div>
+					<div class="col-md-9 padd" style="padding-right:35px">
+						{% for post in posts %}
+							{{post.url }}
+						{% endfor %}
+					</div>
+
+
+
+
+
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

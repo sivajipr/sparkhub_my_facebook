@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{%block content%}
+<p>
+	<div class="container">
+	<div class="jumbotron" style='margin-top:80px'>
+	<form style='margin-left=5px' method='post' action='createevent'>{% csrf_token %}
+	<table class= "tab-1" boarder="2">{{form.errors}}
+			<tr><th><label for="id_title">Event name:</label></th><td>{{ form.title }}</td></tr>
+			<tr><th><label id="datepicker" for="id_startdate">Start date:</label></th><td>{{ form.start_date }}</td></tr>
+			<tr><th><label id="datepicker" for="id_enddate">End Date:</label></th><td>{{ form.end_date }}</td></tr>
+			</table>
+			<a class="UploadButton" id="UploadButton">UploadFile</a>
+			<div class="attachment">
+
+			</div>
+			<div id="InfoBox"></div>
+			<p>
+			<input type="submit" value="ok" />
+		</p>
+	</div>
+	<script type="text/javascript" src="/static/js/ajaxupload.js"></script>
+	<script type="text/javascript">
+	// $(document).ready(function(){
+	// 	console.log('AAAAAAAAA');
+	// 	$("#UploadButton").ajaxUpload({
+	// 		multiple : true,
+	// 		url : '/upload/',
+	// 		name : "file",
+	// 	onSubmit: function() {
+	// 		console.log('bbbbbbbbbbb');
+	// 	},
+	// 	onComplete: function(result) {
+	// 		console.log('ccccccccccc')
+	// 	    var data = $.parseJSON(result);
+	// 	if (!data.error){
+	// 		$(data.data).each(function(k,url){
+	// 			var _cls = url.split('/')[3].split('.')[0];
+	// 			$('.attachment').append('<input type="hidden" class="'+_cls+'" value='+url+' name="attach" />');
+	// 		    $('#InfoBox').append('<p class="'+_cls+'"><img src="'+url+'" width="100px" /><span class="remove_me">X</span></p>');
+	// 		});
+	// 	}
+	// 	else{
+	// 		$('#InfoBox').append(data.error);
+	// 	}
+	// }
+	// });});
+		$(document).on('click','.remove_me',function(){
+			console.log('zzzzzzzzzzzzzzzz')
+		var cls = $(this).parent().attr('class');
+		console.log(cls);
+		$('.'+cls).remove();
+	});
+
+
+</script></div></div></p>
+  <script>
+  $(function() {
+    $( "#id_start_date" ).datepicker();
+    $( "#id_end_date" ).datepicker();
+  });
+  </script>
+		{% endblock %}

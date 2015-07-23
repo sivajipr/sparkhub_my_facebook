@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style='background:white'>
+
+	<div class="row" style='margin-top:80px'>
+
+		<div class="col-md-6">
+		
+{% if not friends_cre and not friends_acc %}
+		<h3>Sorry {{entity}}, you have no friends!!! :-(</h3>
+{% else %}
+<h3>{{entity}} friends with</h3>
+{% for friend_cre in friends_cre %}
+	<div class="col-md-7" style="width:182px;float:left">
+	<img  border="2" class="image-popup-vertical-fit usersearchpic" src="/media/{{ friend_cre.acceptor.profile.get_avatar }}" />
+	<a href="/{{friend_cre.acceptor}}" type='url' class='positioning user-page'>
+		{{friend_cre.acceptor.get_full_name}}</a>
+		<p class='positioning' style="font-size:10px;">{{friend_cre.acceptor.profile.place}}</p>
+	</div>
+	{% endfor %}
+	{% for friend_acc in friends_acc %}
+	<div class="col-md-7" style="width:182px;float:left">
+	<img  border="2" class="image-popup-vertical-fit usersearchpic" src="/media/{{ friend_acc.creator.profile.get_avatar }}" />
+	<a href="/{{friend_acc.creator}}" type='url' class='positioning user-page'>
+		{{friend_acc.creator.get_full_name}}</a>
+		<p class='positioning'style="font-size:10px;">{{friend_acc.creator.profile.place}}</p>
+	</div>
+	{% endfor %}
+	{% endif %}
+	</div></div></div>
+	{% endblock %}
